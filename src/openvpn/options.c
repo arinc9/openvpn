@@ -135,6 +135,9 @@ static const char usage_message[] =
     "                      udp6, tcp6-server, tcp6-client\n"
     "--proto-force p : only consider protocol p in list of connection profiles.\n"
     "                  p = udp or tcp\n"
+#ifdef ENABLE_MPTCP
+    "--mptcp         : Enable Multipath TCP on the TCP connections.\n"
+#endif
     "--connect-retry n [m] : For client, number of seconds to wait between\n"
     "                  connection retries (default=%d). On repeated retries\n"
     "                  the wait time is exponentially increased to a maximum of m\n"
@@ -905,6 +908,10 @@ init_options(struct options *o, const bool init_gc)
 #ifndef ENABLE_DCO
     o->tuntap_options.disable_dco = true;
 #endif /* ENABLE_DCO */
+
+#ifdef ENABLE_MPTCP
+    o->enable_mptcp = false;
+#endif
 }
 
 void
@@ -9512,6 +9519,13 @@ add_option(struct options *options,
             goto err;
         }
     }
+#ifdef ENABLE_MPTCP
+    else if (streq(p[0], "mptcp"), && !p[1])
+    {
+        VERIFY_PERMISSION(OPT_P_GENERAL);
+        options->enable_mptcp = true;
+    }
+#endif
     else
     {
         int i;

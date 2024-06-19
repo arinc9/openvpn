@@ -308,6 +308,13 @@ AC_ARG_WITH(
 	[with_openssl_engine="auto"]
 )
 
+AC_ARG_WITH(
+	[mptcp],
+	[AS_HELP_STRING([--disable-mptcp], [Disable Multipath TCP support @<:@default=yes@:>@])],
+	,
+	[enable_mptcp="yes"]
+)
+
 AC_ARG_VAR([PLUGINDIR], [Path of plug-in directory @<:@default=LIBDIR/openvpn/plugins@:>@])
 if test -n "${PLUGINDIR}"; then
 	plugindir="${PLUGINDIR}"
@@ -878,6 +885,17 @@ case "$host" in
 		AC_DEFINE(HAVE_LIBCAPNG, 1, [Enable libcap-ng support])
 	;;
 esac
+
+
+dnl
+dnl Enable checking Multipath TCP support on Linux
+dnl
+case "$host" in
+	*-*-linux*)
+		AC_DEFINE(ENABLE_MPTCP, 1, [Enable checking Multipath TCP support])
+	;;
+esac
+
 
 
 if test "${with_crypto_library}" = "openssl"; then
