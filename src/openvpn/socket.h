@@ -47,6 +47,10 @@
  */
 #define RESOLV_RETRY_INFINITE 1000000000
 
+#ifndef IPPROTO_MPTCP
+#define IPPROTO_MPTCP 262
+#endif
+
 /*
  * packet_size_type is used to communicate packet size
  * over the wire when stream oriented protocols are
@@ -121,9 +125,7 @@ struct link_socket_info
     sa_family_t af;                     /* Address family like AF_INET, AF_INET6 or AF_UNSPEC*/
     bool bind_ipv6_only;
     int mtu_changed;            /* Set to true when mtu value is changed */
-#if defined(TARGET_LINUX) && defined(ENABLE_MPTCP)
-    bool multipath;
-#endif
+    bool mptcp;
 };
 
 /*

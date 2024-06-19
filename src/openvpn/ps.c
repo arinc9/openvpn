@@ -38,10 +38,8 @@
 #include "memdbg.h"
 
 
-#if defined(TARGET_LINUX) && defined(ENABLE_MPTCP)
 #ifndef IPPROTO_MPTCP
 #define IPPROTO_MPTCP 262
-#endif
 #endif
 
 
@@ -433,11 +431,9 @@ proxy_entry_new(struct proxy_connection **list,
     struct proxy_connection *cp;
 
     /* connect to port share server */
-#if defined(TARGET_LINUX) && defined(ENABLE_MPTCP)   
-    if ((sd_server = socket(PF_INET, SOCK_STREAM, IPPROTO_MPTCP)) < 0)
-#else
-    if ((sd_server = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
-#endif
+    /* TODO: provide access to the options structure */
+    if ((sd_server = socket(PF_INET, SOCK_STREAM,
+                            options->enable_mptcp ? IPPROTO_MPTCP, IPPROTO_TCP)) < 0)
     {
         msg(M_WARN|M_ERRNO, "PORT SHARE PROXY: cannot create socket");
         return false;

@@ -461,7 +461,7 @@ struct options
     unsigned int server_flags;
 
 #ifdef ENABLE_MPTCP
-    bool enable_multipath;
+    bool enable_mptcp;
 #endif  
     bool server_bridge_proxy_dhcp;
 
